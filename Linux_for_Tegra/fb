@@ -1,0 +1,1 @@
+bootloader/nvflash --configfile bootloader/cardhu/cfg/gnu_linux_fastboot_emmc_full.cfg --download 4 bootloader.bin --bl bootloader.bin --go

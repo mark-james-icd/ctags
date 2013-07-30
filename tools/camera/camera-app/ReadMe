@@ -1,0 +1,51 @@
+Camera Diagnostic App
+---------------------
+
+
+1. Build the app from source on host machine
+
+1.1 Dependencies
+1.1.1 Qt Project
+	Download and install from http://qt-project.org/downloads
+1.1.2 GCC
+	Follow instructions on https://help.ubuntu.com/community/InstallingCompilers
+1.1.3 libV4l2-dev
+	Open terminal and type:
+	sudo apt-get update
+	sudo apt-get install libv4l-dev
+1.1.4 Git
+	Open terminal and type:
+	sudo apt-get install git
+1.2 Download and Build source
+1.2.1 Clone repositry
+	Create a folder for the repository contents 
+	Open terminal:
+	Change directory to the created folder e.g. cd /home/<user>/Projects/Sorenson/videophone_platform
+	Clone the repository using a Git client(url: https=https://github.com/iCD/videophone_platform.git / ssh=git@github.com:iCD/videophone_platform.git) or cmd line: "git clone --recurse-submodules git@github.com:iCD/videophone_platform.git"
+1.2.2 Build Qt Project
+	Open Qt Creator
+	Open project from folder location /tools/camera/camera-app
+	Set compiler under Tools->Options->Build & Run->Compilers tab to GCC
+	Check build location from the 'Build Settings' under 'Projects'
+	From Build menu, select "Build project "cameraTest"
+	From Build menu, select Run to test on host machine
+
+
+2. Build the app from source on target machine (**ToDo**)
+...
+
+
+Using the App
+-------------
+Once the app is running, the user is given 2 windows; the main window containing the camera output, and another containing controls to manipulate the camera output.
+The main window also has menu options allowing the user to:
+- Change camera resolution
+- Capture a still image
+- Reset controls
+- Dump the sensor registers
+
+
+Reference
+---------
+http://qt-project.org
+

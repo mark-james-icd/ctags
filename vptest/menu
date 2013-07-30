@@ -1,0 +1,111 @@
+#/bin/sh
+
+usage() { 
+	echo 'usage: menu [menu_name]'
+	exit 1 
+}
+
+read_menu() { 
+	IFS='\n' read -r -d '' ${1} || true;
+}
+
+# Main menu
+read_menu main_menu <<\END
+#
+mta,Manufacturing Tests,./menu mta_menu
+dta,Diagnostic Tests,./menu dta_menu
+rta,RCU Tests,./menu rcu_menu
+#
+END
+
+# Manufacturing Tests
+read_menu mta_menu <<\END
+#
+ileds,Indicator LEDs,nyi
+lrleds,Light Ring LEDs,nyi
+userin,User Input,nyi
+ringer,Audible Ringer,nyi
+slic,SLIC (External Flasher),nyi
+net,Network,menu
+audio,Audio and Mic,menu
+hdmi,HDMI Display and Overlay,menu
+rcu,RCU,menu
+usb,USB,menu
+rcuconn,RCU Connector,nyi
+touch,Capacitive Touch Screen,nyi
+#
+END
+
+# Diagnostic Tests
+read_menu dta_menu <<\END
+#
+custsupp,Customer Support,menu
+#
+END
+
+# Diagnostics Customer Support
+custsupp_menu rcu_menu <<\END
+#
+colorbar,View Imager Color Bar,nyi
+#
+END
+
+# RCU Tests
+read_menu rcu_menu <<\END
+#
+#
+END
+
+# the only command line parameter allowed must be a predefined menu name
+case "$#" in
+	0 )	menu=$main_menu
+			;;
+	1 )	[ -z ${!1} ] && usage 
+			menu=${!1}
+			;;
+	* )	usage
+esac
+
+# TODO check for required commands: dialog
+
+# construct arrays of tags, prompts, and commands
+tags=()
+prompts=()
+commands=()
+while IFS=, read -r tag prompt command ; do 
+	[[ -z "$tag" || ${tag:0:1} == '#' ]] && continue
+	tags+=("$tag")
+    prompts+=("$prompt")
+    commands+=("$command")
+done <<<"$menu"
+
+#for s in "${tags[@]}"; do 
+#    echo "tags $s"
+#done
+#for s in "${prompts[@]}"; do 
+#    echo "prompts $s"
+#done
+#for s in "${commands[@]}"; do 
+#    echo "commands $s"
+#done
+
+# construct indexed array of prompts
+items=()
+for s in "${prompts[@]}"; do 
+    items+=($((${#items[@]}/2+1)) "$s") 
+done
+
+#for s in "${items[@]}"; do 
+#    echo "$s"
+#done
+
+# get result from menu dialog 
+cmd=(dialog --menu "Select options:" 22 76 16)
+item=$(($("${cmd[@]}" "${items[@]}" 2>&1 >/dev/tty) - 1))
+echo $item
+[ $item -eq -1 ] && exit 1
+
+# invoke command 
+echo invoke ${commands[$item]}
+$(${commands[$item]})
+

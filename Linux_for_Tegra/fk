@@ -1,0 +1,1 @@
+./flash.sh -F ./bootloader.bin -L ./bootloader.bin -o 0x40080105 -k 6 -K _out/arch/arm/boot/zImage cardhu mmcblk0p1
